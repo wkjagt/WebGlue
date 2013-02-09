@@ -1,0 +1,16 @@
+{
+    "name": "webglue/webglue",
+    "description": "Frameworm in one file",
+    "type": "library",
+    "keywords": ["framework"],
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {
+            "WebGlue": ""
+        }
+    },
+    "require": {
+        "symfony/http-foundation": "v2.1.7",
+        "pimple/pimple": "v1.0.1"
+    }
+}
