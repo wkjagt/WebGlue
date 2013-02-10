@@ -20,22 +20,24 @@ class WebGlue implements ArrayAccess
         $this->container = new Pimple;
     }
 
-    public function get($pattern, $callback)
+    public function __call($method, $args)
     {
-        $this->routes[] = (object) array(
-            'method' => 'GET',
-            'pattern' => $pattern,
-            'callback' => $callback
-        );
-    }
-
-    public function post($pattern, $callback)
-    {
-        $this->routes[] = (object) array(
-            'method' => 'POST',
-            'pattern' => $pattern,
-            'callback' => $callback
-        );
+        $valid = in_array($method, array(
+            'get', 
+            'post',
+            'put',
+            'delete',
+            'head',
+            'options',
+            'patch',
+        ));
+        if($valid) {
+            $this->routes[] = (object) array(
+                'method' => strtoupper($method),
+                'pattern' => $args[0],
+                'callback' => $args[1]
+            );
+        }
     }
 
     public function run()
@@ -67,7 +69,13 @@ class WebGlue implements ArrayAccess
                     }
 
                     $callback = $route->callback;
-                    $callback($this, $request, $response);
+
+                    if(is_string($callback)) {
+                        $callback($this, $request, $response);                        
+                    } elseif(is_array($callback) && count($callback) == 2) {
+                        call_user_func_array($callback, array($this, $request, $response));
+                    }
+
                     $response->send();
                     exit;
                 }
