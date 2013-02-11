@@ -1,6 +1,6 @@
 {
     "name": "webglue/webglue",
-    "description": "Frameworm in one file",
+    "description": "Framework in one file",
     "type": "library",
     "keywords": ["framework"],
     "license": "MIT",
