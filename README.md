@@ -31,7 +31,7 @@ $app = new WebGlue;
 $app['twig'] = new Twig_Environment(new Twig_Loader_Filesystem(__DIR__.'/templates'));
 
 $app->get('/', function($app, $request, $response){
-    $response->setContent(app['twig']->render('hellow_world.html.twig'));
+    $response->setContent(app['twig']->render('hello_world.html.twig'));
 });
 ```
 
