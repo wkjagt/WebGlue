@@ -9,6 +9,7 @@ class WebGlue implements ArrayAccess
      */
     public static $routeParamPatterns = array(
         '|{(\w+):num}|' => '(?P<$1>\d+)',
+        '|{(\w+):string}|' => '(?P<$1>\w+)',
     );
 
     protected $routes = array();
