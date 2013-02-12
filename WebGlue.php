@@ -7,7 +7,7 @@ class WebGlue implements ArrayAccess
      * Available wildcards:
      *    {num}    : numeric values
      */
-    public static $paramPatterns = array(
+    public static $routeParamPatterns = array(
         '|{(\w+):num}|' => '(?P<$1>\d+)',
     );
 
@@ -23,21 +23,17 @@ class WebGlue implements ArrayAccess
     public function __call($method, $args)
     {
         $valid = in_array($method, array(
-            'get', 
-            'post',
-            'put',
-            'delete',
-            'head',
-            'options',
-            'patch',
-        ));
+            'get', 'post', 'put', 'delete', 'head', 'options', 'patch',
+        )) && count($args) >= 2;
         if($valid) {
             $this->routes[] = (object) array(
                 'method' => strtoupper($method),
                 'pattern' => $args[0],
                 'callback' => $args[1]
             );
+            return;
         }
+        throw new UnexpectedValueException('Route error');
     }
 
     public function run()
@@ -46,8 +42,8 @@ class WebGlue implements ArrayAccess
         $response = Symfony\Component\HttpFoundation\Response::create();
 
         list($s, $r) = array(
-            array_keys(static::$paramPatterns),
-            array_values(static::$paramPatterns)
+            array_keys(static::$routeParamPatterns),
+            array_values(static::$routeParamPatterns)
         );
 
         $pathFound = false;
