@@ -5,6 +5,18 @@ WebGlue is a tiny web framework. Actually it's nothing more than some glue betwe
 [Symfony HttpFoundation](https://github.com/symfony/HttpFoundation) Request and Response object, and a very simple
 router. I find it helps me a lot for quick prototyping and small projects.
 
+#Usage
+
+Very simple:
+
+1. Instantiate WebGlue
+2. Add services to instance using array notation *(optional)*
+3. Add routes using following syntax `$app-><method>(<route>, <callback>);`
+4. Your callback will get 3 arguments passed to it: the WebGlue instance, a request object, a response object
+5. Modify the response to your needs. You don't need to return it.
+
+#Examples
+
 ##Hello Willem
 
 ```php
