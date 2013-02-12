@@ -3,7 +3,7 @@ WebGlue
 
 WebGlue is a tiny web framework. Actually it's nothing more than some glue between the
 [Symfony HttpFoundation](https://github.com/symfony/HttpFoundation) Request and Response object, and a very simple
-router.
+router. I find it helps me a lot for quick prototyping and small projects.
 
 ##Hello Willem
 
