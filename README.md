@@ -10,11 +10,11 @@ router. I find it helps me a lot for quick prototyping and small projects.
 ```php
 $app = new WebGlue;
 
+// for routes accepting POST, use $app->post, etc.
 $app->get('/', function($app, $request, $response){
     $response->setContent('hello world');
 });
 
-// for routes accepting POST, use $app->post, etc.
 $app->get('/greet/{name:string}', function($app, $request, $response){
     $name = $request->attributes->get('name');
     $response->setContent('hello ' . $name);
