@@ -98,6 +98,7 @@ class WebGlue implements ArrayAccess
                     if(is_callable($route->callback)) {
                         $response->setStatusCode(200);
                         call_user_func_array($route->callback, array($this, $request, $response));
+                        break;
                     } else {
                         $response->setStatusCode(500);
                     }
