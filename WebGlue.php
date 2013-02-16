@@ -23,6 +23,10 @@ class WebGlue implements ArrayAccess
      */
     protected $container;
 
+    protected $before;
+
+    protected $after;
+
     /**
      * Constructor to set Pimple DIC
      */
@@ -56,11 +60,22 @@ class WebGlue implements ArrayAccess
             $this->routes[] = (object) array(
                 'method' => strtoupper($method),
                 'pattern' => $args[0],
-                'callback' => $args[1]
+                'callback' => $args[1],
+                'tags' => array_slice($args, 2)
             );
             return;
         }
         throw new UnexpectedValueException('Route error');
+    }
+
+    public function before($before)
+    {
+        $this->before = $before;
+    }
+
+    public function after($after)
+    {
+        $this->after = $after;
     }
 
     /**
@@ -89,15 +104,28 @@ class WebGlue implements ArrayAccess
 
                 if($route->method == $request->getMethod()) {
 
-                    // get the named groups and set them as request attributes
-                    foreach($matches as $key => $match) {
-                        if(!is_numeric($key)) {
-                            $request->attributes->set($key, $match);
-                        }
-                    }
                     if(is_callable($route->callback)) {
+
                         $response->setStatusCode(200);
+
+                        // get the named groups and set them as request attributes
+                        foreach($matches as $key => $match) {
+                            if(!is_numeric($key)) {
+                                $request->attributes->set($key, $match);
+                            }
+                        }
+                        $this['_route'] = $route;
+
+                        if(is_callable($this->before)) {
+                            call_user_func_array($this->before, array($this, $request, $response));
+                        }
+
                         call_user_func_array($route->callback, array($this, $request, $response));
+
+                        if(is_callable($this->after)) {
+                            call_user_func_array($this->after, array($this, $request, $response));
+                        }
+
                         break;
                     } else {
                         $response->setStatusCode(500);
@@ -148,5 +176,10 @@ class WebGlue implements ArrayAccess
      */
     public function offsetGet($offset) {
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
+    }
+
+    public function __destruct()
+    {
+        $this->run();
     }
 }
