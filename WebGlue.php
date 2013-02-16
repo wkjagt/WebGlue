@@ -10,7 +10,7 @@ class WebGlue implements ArrayAccess
      */
     public static $routeParamPatterns = array(
         '|{(\w+):num}|' => '(?P<$1>\d+)',
-        '|{(\w+):string}|' => '(?P<$1>\w+)',
+        '|{(\w+):string}|' => '(?P<$1>[\w\s]+)',
     );
 
     /** 
@@ -98,10 +98,9 @@ class WebGlue implements ArrayAccess
             // turn pattern into regex pattern
             $pattern = ':^' . preg_replace($s, $r, $route->pattern) . '$:';
 
-            if(preg_match($pattern, $request->getPathInfo(), $matches)) {
+            if(preg_match($pattern, urldecode($request->getPathInfo()), $matches)) {
 
                 $response->setStatusCode(405);
-
                 if($route->method == $request->getMethod()) {
 
                     if(is_callable($route->callback)) {
