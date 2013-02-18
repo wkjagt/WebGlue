@@ -132,7 +132,7 @@ class WebGlue implements ArrayAccess
                 }
             }
         }
-        $response->send();
+        $response->prepare($request)->send();
     }
 
     /**
