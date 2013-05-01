@@ -95,6 +95,7 @@ class WebGlue implements ArrayAccess
 
         foreach($this->routes as $route) {
 
+
             // turn pattern into regex pattern
             $pattern = ':^' . preg_replace($s, $r, $route->pattern) . '$:';
 
@@ -175,10 +176,5 @@ class WebGlue implements ArrayAccess
      */
     public function offsetGet($offset) {
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
-    }
-
-    public function __destruct()
-    {
-        $this->run();
     }
 }
